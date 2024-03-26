@@ -1,8 +1,12 @@
-import { View } from "react-native";
+import { Text, View } from "react-native";
 import styles from "./styles";
 
 function Login() {
-    return <View style={styles.container}></View>;
+    return (
+        <View style={styles.container}>
+            <Text>teste</Text>
+        </View>
+    );
 }
 
 export default Login;

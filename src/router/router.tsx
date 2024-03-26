@@ -1,26 +1,34 @@
-import { NativeRouter, Route, Router, Routes } from "react-router-native";
+import { NativeRouter, Route, Routes } from "react-router-native";
 import Main from "../bases/main";
 import Initial from "../bases/initial";
 import Home from "../pages/home";
+import { View } from "react-native";
+import Login from "../pages/login";
+import ResetPassword from "../pages/resetPassword";
+import Matches from "../pages/matches";
+import Chat from "../pages/chat";
+import Profile from "../pages/profile";
 
-function router() {
+function Router() {
     return (
-        <NativeRouter>
-            <Routes location={"login"}>
-                <Route element={<Initial />}>
-                    <Route path="login" element={<Home />} />
-                    <Route path="resetPassword" element={<Home />} />
-                </Route>
+        <View style={{ flex: 1 }}>
+            <NativeRouter initialEntries={["/login"]}>
+                <Routes>
+                    <Route element={<Initial />}>
+                        <Route path="login" element={<Login />} />
+                        <Route path="resetPassword" element={<ResetPassword />} />
+                    </Route>
 
-                <Route element={<Main />}>
-                    <Route path="home" element={<Home />} />
-                    <Route path="matches" element={<Home />} />
-                    <Route path="chat" element={<Home />} />
-                    <Route path="profile" element={<Home />} />
-                </Route>
-            </Routes>
-        </NativeRouter>
+                    <Route element={<Main />}>
+                        <Route path="home" element={<Home />} />
+                        <Route path="matches" element={<Matches />} />
+                        <Route path="chat" element={<Chat />} />
+                        <Route path="profile" element={<Profile />} />
+                    </Route>
+                </Routes>
+            </NativeRouter>
+        </View>
     );
 }
 
-export default router;
+export default Router;
