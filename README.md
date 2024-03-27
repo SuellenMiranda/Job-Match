@@ -27,13 +27,13 @@ Para a utilização (será acrecentado)
 Com a professora Gabriela Martins.
 | Cargo | Nome |
 |---|---|
-| Desenvolvedor | Davi Alves dos Santos |
-| Desenvolvedor | Estêvão Guerra Coutinho |
-| Desenvolvedor | Felipe Montebeller Rocha |
-| QA | Felipe Ferreira da Silva |
-| QA | Matheus Felipe Costa Santos |
-| UX | Luiz Guilherme de Souza Silva |
-| Scrum Master/Product Owner | Suellen Miranda Amorim |
+| Desenvolvedor | Davi Alves |
+| Desenvolvedor | Estêvão Guerra |
+| Desenvolvedor | Felipe Montebeller |
+| QA | Felipe Ferreira |
+| QA | Matheus Felipe Costa |
+| UX | Luiz Guilherme de Souza |
+| Scrum Master/Product Owner | Suellen Miranda |
 
 
 ### Trabalho de Conclusão de Curso
