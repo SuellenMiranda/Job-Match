@@ -4,7 +4,6 @@ import Initial from "../bases/initial";
 import Home from "../pages/home";
 import { View } from "react-native";
 import Login from "../pages/login";
-import ResetPassword from "../pages/resetPassword";
 import Matches from "../pages/matches";
 import Chat from "../pages/chat";
 import Profile from "../pages/profile";
@@ -16,7 +15,6 @@ function Router() {
                 <Routes>
                     <Route element={<Initial />}>
                         <Route path="login" element={<Login />} />
-                        <Route path="resetPassword" element={<ResetPassword />} />
                     </Route>
 
                     <Route element={<Main />}>

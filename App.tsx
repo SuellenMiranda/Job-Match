@@ -1,20 +1,18 @@
-import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { StyleSheet, View } from "react-native";
 import Router from "./src/router/router";
 
 export default function App() {
     return (
-        <View style={styles.container}>
-            <StatusBar style="auto" />
-
+        <SafeAreaView style={styles.container}>
             <Router />
-        </View>
+        </SafeAreaView>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: "#ccc",
+        backgroundColor: "#ffffff",
     },
 });
