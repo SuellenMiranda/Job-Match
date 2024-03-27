@@ -1,31 +1,33 @@
-import { StyleSheet } from "react-native";
+import { Dimensions, StyleSheet } from "react-native";
+
+const SCREEN_WIDTH = Dimensions.get("window").width;
 
 export default StyleSheet.create({
     container: {
         width: "100%",
     },
-    boxGroup: {
-        flexDirection: "row",
+    flatlist: {
         width: "100%",
-        position: "relative",
-        alignItems: "center",
-        justifyContent: "center",
+    },
+    containerFlatlist: {
+        width: "300%",
+        alignItems: "stretch",
+        justifyContent: "space-around",
     },
     boxForm: {
         elevation: 5,
-        shadowColor: "#000",
+        shadowColor: "#000000",
         shadowOffset: { width: 2, height: 5 },
         shadowOpacity: 0.2,
         shadowRadius: 5,
-        position: "absolute",
         borderRadius: 10,
         backgroundColor: "#fff",
-        width: "80%",
         alignItems: "center",
         justifyContent: "center",
         padding: 20,
         gap: 14,
-        top: 0,
+        width: SCREEN_WIDTH * 0.8,
+        margin: 20,
     },
     boxTitle: {
         fontWeight: "bold",
@@ -46,7 +48,7 @@ export default StyleSheet.create({
         paddingHorizontal: 16,
         paddingVertical: 8,
         borderRadius: 4,
-        minWidth: "50%",
+        // minWidth: "50%",
         elevation: 5,
         shadowColor: "#000",
         shadowOffset: { width: 2, height: 5 },

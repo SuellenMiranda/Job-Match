@@ -24,14 +24,12 @@ export default StyleSheet.create({
         width: "100%",
         alignItems: "center",
         justifyContent: "flex-end",
-        paddingBottom: 20,
     },
     bottom: {
         flex: 2,
         width: "100%",
         alignItems: "center",
         justifyContent: "flex-start",
-        paddingTop: 20,
     },
     logo: {
         height: 100,
