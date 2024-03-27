@@ -1,7 +1,12 @@
 import styles from "./styles";
 import { Dimensions, FlatList, Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useEffect, useRef, useState } from "react";
-
+import Animated, {
+    useSharedValue,
+    withTiming,
+    useAnimatedStyle,
+    Easing,
+} from "react-native-reanimated";
 const SCREEN_WIDTH = Dimensions.get("window").width;
 
 function FormCadastro({ scrollToIndex }: { scrollToIndex: (n: number) => void }) {
@@ -125,14 +130,25 @@ function Login() {
         <FormReset scrollToIndex={scrollToIndex} />,
     ];
 
+    const opacityFlatlist = useSharedValue(0);
+    const styleFlatlist = useAnimatedStyle(() => ({
+        opacity: withTiming(opacityFlatlist.value, {
+            duration: 1000,
+            easing: Easing.inOut(Easing.circle),
+        }),
+    }));
+    useEffect(() => {
+        opacityFlatlist.value = 1;
+    }, []);
+
     return (
         <View style={styles.container}>
-            <FlatList
+            <Animated.FlatList
                 ref={flatlistRef}
                 data={forms}
                 renderItem={({ item }) => item}
                 horizontal
-                style={styles.flatlist}
+                style={[styles.flatlist, styleFlatlist]}
                 contentContainerStyle={styles.containerFlatlist}
                 showsHorizontalScrollIndicator={false}
                 scrollEnabled={false}
