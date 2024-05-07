@@ -1,21 +1,18 @@
 import { NativeRouter, Route, Routes } from "react-router-native";
 import Main from "../bases/main";
 import Initial from "../bases/initial";
-import Home from "../pages/home";
+import Home from "../screens/Home";
 import { View } from "react-native";
-import Login from "../pages/login";
-import Matches from "../pages/matches";
-import Chat from "../pages/chat";
-import Profile from "../pages/profile";
+import Matches from "../screens/Matches";
+import Chat from "../screens/Messages";
+import Profile from "../screens/Profile";
 
 function Router() {
     return (
         <View style={{ flex: 1 }}>
-            <NativeRouter initialEntries={["/login"]}>
+            <NativeRouter>
                 <Routes>
-                    <Route element={<Initial />}>
-                        <Route path="login" element={<Login />} />
-                    </Route>
+                    <Route index element={<Initial />} />
 
                     <Route element={<Main />}>
                         <Route path="home" element={<Home />} />
