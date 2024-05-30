@@ -27,9 +27,9 @@ Para a utilização (será acrecentado)
 Com a professora Gabriela Martins.
 | Cargo | Nome |
 |---|---|
-| Desenvolvedor | Davi Alves |
-| Desenvolvedor | Estêvão Guerra |
-| Desenvolvedor | Felipe Montebeller |
+| Dev | Davi Alves |
+| Dev BD | Estêvão Guerra |
+| Dev | Felipe Montebeller |
 | QA | Felipe Ferreira |
 | QA | Matheus Felipe Costa |
 | UX | Luiz Guilherme de Souza |
@@ -37,5 +37,7 @@ Com a professora Gabriela Martins.
 
 
 ### Trabalho de Conclusão de Curso
-- Suellen Miranda
-- Frederico Tatagiba
+|   | Nome |
+|---|---|
+| 1 | Suellen Miranda |
+| 2 | Frederico Tatagiba |
