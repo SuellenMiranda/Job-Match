@@ -6,6 +6,7 @@ import styles from "../../assets/styles";
 import axios from "axios";
 import { Text } from "react-native";
 import getRandomImage from "../utils/getRandomImage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type ExploreData = {
     id: number;
@@ -16,10 +17,21 @@ type ExploreData = {
 
 const Home = () => {
     const [exploreData, setExploreData] = useState<ExploreData[]>();
+    const [user, setUser] = useState<any>();
 
     useEffect(() => {
+        AsyncStorage.getItem("userStorage").then((d) => {
+            if (!d) throw new Error("User storage não foi encontrado");
+            const user = JSON.parse(d);
+            setUser(user);
+        });
+    }, []);
+
+    useEffect(() => {
+        if (!user) return;
+
         axios
-            .get("/company/explore")
+            .get(`/company/explore/${user.id}`)
             .then((res) =>
                 setExploreData(res.data.map((d: any) => ({ ...d, foto: getRandomImage() })))
             )
@@ -32,19 +44,30 @@ const Home = () => {
                     mensagem || "Erro inesperado"
                 );
             });
-    }, []);
+    }, [user]);
+
+    const onLeft = (id: number) => {
+        const empresa = exploreData![id];
+
+        axios.post("/match", { empresaId: empresa.id, userId: user.id });
+    };
 
     return (
         <ImageBackground source={require("../../assets/images/bg.png")} style={styles.bg}>
             <View style={styles.containerHome}>
                 <View style={styles.top}>
-                    <City />
+                    <City localizacao={user?.endereco} />
                     <Filters />
                 </View>
 
                 {exploreData ? (
                     exploreData.length ? (
-                        <CardStack loop verticalSwipe={false} renderNoMoreCards={() => null}>
+                        <CardStack
+                            loop
+                            verticalSwipe={false}
+                            renderNoMoreCards={() => null}
+                            onSwipedLeft={onLeft}
+                        >
                             {exploreData.map((item) => (
                                 <Card key={item.id}>
                                     <CardItem

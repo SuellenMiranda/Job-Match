@@ -32,9 +32,9 @@ companyRoutes.post("/login", async (req, res) => {
     }
 });
 
-companyRoutes.get("/explore", async (req, res) => {
+companyRoutes.get("/explore/:id", async (req, res) => {
     try {
-        const { id: userId }: User = req.body;
+        const userId = Number(req.params.id);
 
         const companies = await prisma.company.findMany({
             where: { match: { none: { userId: userId } } },

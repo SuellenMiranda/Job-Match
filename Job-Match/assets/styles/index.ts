@@ -107,7 +107,7 @@ export default StyleSheet.create({
         backgroundColor: WHITE,
         padding: 10,
         borderRadius: 20,
-        width: 100,
+        width: 150,
         elevation: 1,
         shadowOpacity: 0.05,
         shadowRadius: 10,
@@ -221,6 +221,7 @@ export default StyleSheet.create({
         resizeMode: "cover",
         width: DIMENSION_WIDTH,
         height: DIMENSION_HEIGHT,
+        position: "relative",
     },
     top: {
         paddingTop: 50,
@@ -255,9 +256,6 @@ export default StyleSheet.create({
     photo: {
         width: DIMENSION_WIDTH,
         height: 450,
-    },
-    topIconLeft: {
-        paddingLeft: 20,
     },
     topIconRight: {
         paddingRight: 20,

@@ -187,8 +187,9 @@ function Login({ onLogin, clickCadastro }: { onLogin(): void; clickCadastro(tipo
     };
 
     const onClickCadastro = async () => {
-        const tipo: string = await new Promise((res) =>
+        const tipo: string | null = await new Promise((res) =>
             Alert.alert("Tipo de usuário", "Selecione a opção de cadastro desejada!", [
+                { text: "Cancelar", onPress: () => res(null), style: "cancel" },
                 { text: "Candidato", onPress: () => res("candidato") },
                 { text: "Empresa", onPress: () => res("empresa") },
             ])

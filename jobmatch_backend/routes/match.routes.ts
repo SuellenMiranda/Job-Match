@@ -5,7 +5,7 @@ const prisma = new PrismaClient();
 
 const matchRoutes = Router();
 
-matchRoutes.get("/", async (req, res) => {
+matchRoutes.get("/fromUser/:id", async (req, res) => {
     try {
         const { id: userId }: User = req.body;
 
@@ -15,6 +15,24 @@ matchRoutes.get("/", async (req, res) => {
         });
 
         res.send(matches);
+    } catch (err) {
+        console.error(err);
+        res.status(500).send(err);
+    }
+});
+
+matchRoutes.post("/", async (req, res) => {
+    try {
+        const { userId, empresaId } = req.body;
+
+        const createdMatch = await prisma.match.create({
+            data: {
+                companyId: empresaId,
+                userId: userId,
+            },
+        });
+
+        res.send(createdMatch);
     } catch (err) {
         console.error(err);
         res.status(500).send(err);

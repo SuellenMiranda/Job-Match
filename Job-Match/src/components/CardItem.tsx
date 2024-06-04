@@ -18,6 +18,7 @@ const CardItem = ({
     isOnline,
     matches,
     name,
+    onPress,
 }: CardItemT) => {
     // Custom styling
     const fullWidth = Dimensions.get("window").width;
@@ -41,7 +42,7 @@ const CardItem = ({
     ];
 
     return (
-        <View style={styles.containerCardItem}>
+        <TouchableOpacity onPress={onPress} style={styles.containerCardItem}>
             {/* IMAGE */}
             <Image source={image} style={imageStyle} />
 
@@ -88,7 +89,7 @@ const CardItem = ({
                     </TouchableOpacity>
                 </View>
             )}
-        </View>
+        </TouchableOpacity>
     );
 };
 
