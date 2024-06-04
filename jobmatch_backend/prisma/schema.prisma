@@ -1,0 +1,44 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider = "mysql"
+    url      = env("DATABASE_URL")
+}
+
+model User {
+    id       Int     @id @default(autoincrement())
+    email    String  @unique
+    phone    String  @unique
+    password String
+    name     String
+    city     String
+    state    String
+    picture  String?
+    match    Match[]
+}
+
+model Company {
+    id           Int     @id @default(autoincrement())
+    razaoSocial  String
+    nomeFantasia String
+    cnpj         String
+    email        String
+    setor        String
+    localizacao  String
+    descricao    String  @db.Text
+    porte        String
+    senha        String
+    foto         String?
+
+    match Match[]
+}
+
+model Match {
+    id        Int     @id @default(autoincrement())
+    userId    Int
+    companyId Int
+    user      User    @relation(fields: [userId], references: [id])
+    company   Company @relation(fields: [companyId], references: [id])
+}

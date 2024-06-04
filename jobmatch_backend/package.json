@@ -1,0 +1,23 @@
+{
+  "name": "jobmatch_backend",
+  "version": "1.0.0",
+  "main": "src/index.ts",
+  "license": "MIT",
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "ndm": "nodemon src/index.ts"
+  },
+  "dependencies": {
+    "@prisma/client": "^5.14.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.12.12",
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "express": "^4.19.2",
+    "nodemon": "^3.1.0",
+    "prisma": "^5.14.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.4.5"
+  }
+}
