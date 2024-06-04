@@ -10,6 +10,12 @@ O Job Match é um aplicativo móvel inovador desenvolvido para facilitar a busca
 - Feedback interativo
 - Notificações
 
+## Tecnologias Utilizadas
+- Linguagem de Programação: React Native
+- Plataforma: Android
+- Segurança: Proteção de informações dos usuários
+- Acessibilidade: Usabilidade por pessoas com deficiência
+
 ## Metodologia
 O aplicativo foi desenvolvido utilizando uma abordagem iterativa e incremental, com base nos feedbacks recebidos dos usuários. A metodologia ágil permitiu ciclos de desenvolvimento curtos e iterativos, garantindo a viabilidade do projeto.
 
@@ -19,17 +25,24 @@ A implementação do aplicativo Job Match tem o potencial de melhorar significat
 ## Palavras-chave
 Aplicativo Mobile, Vagas e Oportunidades, Feedback, Processos seletivos
 
-## Mais informações
-Para a utilização (será acrecentado)
+## Estrutura do Projeto
+- `src/`: Contém o código-fonte do aplicativo
+- `docs/`: Documentação do projeto
+- `design/`: Protótipos e design da interface
+
+## Instalação
+1. Clone o repositório: `git clone https://github.com/SuellenMiranda/Job-Match.git`
+2. Instale as dependências: `npm install`
+3. Execute o aplicativo: `npm start`
 
 ## Equipe do Projeto
 ### Laboratório e engenharia de Software
 Com a professora Gabriela Martins.
 | Cargo | Nome |
 |---|---|
-| Desenvolvedor | Davi Alves |
-| Desenvolvedor | Estêvão Guerra |
-| Desenvolvedor | Felipe Montebeller |
+| Dev | Davi Alves |
+| Dev BD | Estêvão Guerra |
+| Dev | Felipe Montebeller |
 | QA | Felipe Ferreira |
 | QA | Matheus Felipe Costa |
 | UX | Luiz Guilherme de Souza |
@@ -37,5 +50,8 @@ Com a professora Gabriela Martins.
 
 
 ### Trabalho de Conclusão de Curso
-- Suellen Miranda
-- Frederico Tatagiba
+Com orientação do Cássio Capucho
+|   | Nome |
+|---|---|
+| 1 | Suellen Miranda |
+| 2 | Frederico Tatagiba |
