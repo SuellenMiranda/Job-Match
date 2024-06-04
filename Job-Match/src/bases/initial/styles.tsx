@@ -10,6 +10,11 @@ export default StyleSheet.create({
         backgroundColor: Constants.PRIMARY_COLOR2,
         position: "relative",
     },
+    scrollview: {
+        flex: 1,
+        width: "100%",
+    },
+    scrollviewContainer: {},
     logo: {
         height: undefined,
         width: "70%",

@@ -8,31 +8,36 @@ datasource db {
 }
 
 model User {
-    id       Int     @id @default(autoincrement())
-    email    String  @unique
-    phone    String  @unique
-    password String
-    name     String
-    city     String
-    state    String
-    picture  String?
-    match    Match[]
+    id            Int     @id @default(autoincrement())
+    nomeCompleto  String
+    nascimento    String
+    cpf           String  @unique
+    genero        String
+    endereco      String
+    email         String  @unique
+    celular       String  @unique
+    formacao      String
+    experiencia   String
+    habilidades   String
+    areaInteresse String
+    senha         String
+    foto          String?
+    match         Match[]
 }
 
 model Company {
     id           Int     @id @default(autoincrement())
     razaoSocial  String
     nomeFantasia String
-    cnpj         String
-    email        String
+    cnpj         String  @unique
+    email        String  @unique
     setor        String
     localizacao  String
     descricao    String  @db.Text
     porte        String
     senha        String
     foto         String?
-
-    match Match[]
+    match        Match[]
 }
 
 model Match {

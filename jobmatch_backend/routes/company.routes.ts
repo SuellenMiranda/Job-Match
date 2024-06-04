@@ -1,10 +1,36 @@
 import { Router } from "express";
-import { Company, PrismaClient } from "@prisma/client";
+import { Company, PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 const companyRoutes = Router();
+
+companyRoutes.post("/login", async (req, res) => {
+    try {
+        const { email, senha }: Company = req.body;
+
+        const findedCompany = await prisma.company.findFirst({
+            where: { email: email.toLowerCase() },
+            include: { match: { include: { company: true } } },
+        });
+
+        if (!findedCompany) {
+            return res.status(401).send({ message: "Não existe nenhuma empresa com esse email!" });
+        }
+
+        const validPass = bcrypt.compareSync(senha, findedCompany?.senha);
+
+        if (!validPass) {
+            return res.status(401).send({ message: "Senha incorreta!" });
+        }
+
+        res.send(findedCompany);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send(err);
+    }
+});
 
 companyRoutes.get("/explore", async (req, res) => {
     try {
@@ -44,7 +70,7 @@ companyRoutes.post("/", async (req, res) => {
 
         const createdCompany = await prisma.company.create({
             data: {
-                senha,
+                senha: bcrypt.hashSync(senha),
                 razaoSocial,
                 nomeFantasia,
                 cnpj,

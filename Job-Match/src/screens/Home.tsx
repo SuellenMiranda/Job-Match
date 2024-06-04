@@ -3,15 +3,15 @@ import { View, ImageBackground, Alert } from "react-native";
 import CardStack, { Card } from "@starodubenko/react-native-card-stack-swiper";
 import { City, Filters, CardItem } from "../components";
 import styles from "../../assets/styles";
-import DEMO from "../../assets/data/demo";
 import axios from "axios";
 import { Text } from "react-native";
+import getRandomImage from "../utils/getRandomImage";
 
 type ExploreData = {
     id: number;
-    name: string;
-    description: string;
-    picture?: string;
+    nomeFantasia: string;
+    descricao: string;
+    foto?: string;
 };
 
 const Home = () => {
@@ -20,7 +20,9 @@ const Home = () => {
     useEffect(() => {
         axios
             .get("/company/explore")
-            .then((res) => setExploreData(res.data))
+            .then((res) =>
+                setExploreData(res.data.map((d: any) => ({ ...d, foto: getRandomImage() })))
+            )
             .catch((err) => {
                 console.error(err?.response?.data || err);
 
@@ -47,9 +49,9 @@ const Home = () => {
                                 <Card key={item.id}>
                                     <CardItem
                                         hasActions
-                                        image={item.picture}
-                                        name={item.name}
-                                        description={item.description}
+                                        image={item.foto}
+                                        name={item.nomeFantasia}
+                                        description={item.descricao}
                                         matches={Math.floor(Math.random() * 100).toFixed(0)}
                                     />
                                 </Card>

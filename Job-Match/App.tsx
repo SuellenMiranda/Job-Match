@@ -5,7 +5,7 @@ import Constants from "./src/utils/constants";
 import { StatusBar } from "expo-status-bar";
 import axios from "axios";
 
-const baseURL = "http://192.168.1.8:3000";
+const baseURL = "http://192.168.1.12:3000";
 
 axios.defaults.baseURL = baseURL;
 axios.defaults.headers.common["Content-Type"] = "application/json";

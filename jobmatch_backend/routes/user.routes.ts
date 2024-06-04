@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { PrismaClient, User } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import upload from "../multer";
 
 const prisma = new PrismaClient();
 
@@ -8,7 +9,7 @@ const userRoutes = Router();
 
 userRoutes.post("/login", async (req, res) => {
     try {
-        const { email, password }: User = req.body;
+        const { email, senha }: User = req.body;
 
         const findedUser = await prisma.user.findFirst({
             where: { email: email.toLowerCase() },
@@ -19,7 +20,7 @@ userRoutes.post("/login", async (req, res) => {
             return res.status(401).send({ message: "Não existe nenhum usuário com esse email!" });
         }
 
-        const validPass = bcrypt.compareSync(password, findedUser?.password);
+        const validPass = bcrypt.compareSync(senha, findedUser?.senha);
 
         if (!validPass) {
             return res.status(401).send({ message: "Senha incorreta!" });
@@ -34,20 +35,58 @@ userRoutes.post("/login", async (req, res) => {
 
 userRoutes.post("/", async (req, res) => {
     try {
-        const { name, password, email, phone, state, city }: User = req.body;
+        const {
+            nomeCompleto,
+            nascimento,
+            cpf,
+            genero,
+            endereco,
+            email,
+            celular,
+            formacao,
+            experiencia,
+            habilidades,
+            areaInteresse,
+            senha,
+        }: User = req.body;
 
         const createdUser = await prisma.user.create({
             data: {
-                name,
-                password: bcrypt.hashSync(password),
+                nomeCompleto,
+                nascimento,
+                cpf,
+                genero,
+                endereco,
                 email,
-                phone,
-                state,
-                city,
+                celular,
+                formacao,
+                experiencia,
+                habilidades,
+                areaInteresse,
+                senha: bcrypt.hashSync(senha),
             },
         });
 
         return res.send(createdUser);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send(err);
+    }
+});
+
+userRoutes.post("/fotoPerfil", upload.single("foto"), async (req, res) => {
+    try {
+        const files = req.files;
+        console.log(files);
+        return res.status(500).send("ok");
+
+        // const createdUser = await prisma.user.update({
+        //     data: {
+        //         foto: files,
+        //     },
+        // });
+
+        // return res.send(createdUser);
     } catch (err) {
         console.error(err);
         return res.status(500).send(err);

@@ -1,4 +1,4 @@
-import { Alert, Image, Text, TextInput, TouchableOpacity, View } from "react-native";
+import { Alert, Image, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
 import styles from "./styles";
 import { useNavigate } from "react-router-native";
 import Logo from "../../../assets/imgs/icon.png";
@@ -150,26 +150,25 @@ function Tutorial({ onpress }: { onpress(): void }) {
 
 function Login({ onLogin, clickCadastro }: { onLogin(): void; clickCadastro(tipo: string): void }) {
     const [email, setEmail] = useState("");
-    const [pass, setPass] = useState("");
+    const [senha, setSenha] = useState("");
 
     const [keepLogin, setKeepLogin] = useState<boolean>(false);
 
     useEffect(() => {
-        Promise.all([
-            AsyncStorage.getItem("keepLoginStorage"),
-            AsyncStorage.getItem("userStorage"),
-        ]).then((data) => {
-            if (data[0] !== "true" || !data[1]) return;
-
-            onLogin();
-        });
+        // Promise.all([
+        //     AsyncStorage.getItem("keepLoginStorage"),
+        //     AsyncStorage.getItem("userStorage"),
+        // ]).then((data) => {
+        //     if (data[0] !== "true" || !data[1]) return;
+        //     onLogin();
+        // });
     }, []);
 
     const onSubmit = async () => {
         const userLogged = await axios
             .post("/user/login", {
                 email: email,
-                password: pass,
+                senha: senha,
             })
             .then((res) => res.data)
             .catch((err) => {
@@ -255,8 +254,8 @@ function Login({ onLogin, clickCadastro }: { onLogin(): void; clickCadastro(tipo
                         borderRadius: 10,
                     }}
                     secureTextEntry={true}
-                    value={pass}
-                    onChangeText={setPass}
+                    value={senha}
+                    onChangeText={setSenha}
                 />
             </View>
 
@@ -305,6 +304,7 @@ function Login({ onLogin, clickCadastro }: { onLogin(): void; clickCadastro(tipo
                         alignItems: "center",
                         justifyContent: "center",
                     }}
+                    onPress={onClickCadastro}
                 >
                     <Text
                         style={{
@@ -346,13 +346,367 @@ function Login({ onLogin, clickCadastro }: { onLogin(): void; clickCadastro(tipo
 }
 
 function CadastroCandidato({ onBack }: { onBack(): void }) {
+    const [nomeCompleto, setNomeCompleto] = useState("");
+    const [nascimento, setNascimento] = useState("");
+    const [cpf, setCpf] = useState("");
+    const [genero, setGenero] = useState("");
+    const [endereco, setEndereco] = useState("");
+    const [email, setEmail] = useState("");
+    const [celular, setCelular] = useState("");
+    const [formacao, setFormacao] = useState("");
+    const [experiencia, setExperiencia] = useState("");
+    const [habilidades, setHabilidades] = useState("");
+    const [areaInteresse, setAreaInteresse] = useState("");
+    const [foto, setFoto] = useState("");
+    const [senha, setSenha] = useState("");
+    const [confirmarSenha, setConfirmarSenha] = useState("");
+
+    const onSubmit = async () => {
+        if (senha !== confirmarSenha) {
+            Alert.alert("Campos inválidos", "Os campos de senha não estão iguais!");
+            return;
+        }
+
+        const resultCreate = await axios
+            .post("/user", {
+                nomeCompleto,
+                nascimento,
+                cpf,
+                genero,
+                endereco,
+                email,
+                celular,
+                formacao,
+                experiencia,
+                habilidades,
+                areaInteresse,
+                senha,
+            })
+            .then(() => true)
+            .catch((err) => {
+                console.error(err?.response?.data || err);
+
+                const mensagem = err?.response?.data?.message;
+                Alert.alert("Falha na criação do candidato", mensagem || "Erro inesperado.");
+            });
+
+        if (!resultCreate) return;
+
+        if (foto) {
+            const formdata = new FormData();
+            formdata.append("foto", foto);
+
+            await axios
+                .post("/fotoPerfil", formdata, {
+                    headers: { "Content-Type": "multipart/form-data" },
+                })
+                .then(() => true)
+                .catch((err) => {
+                    console.error(err?.response?.data || err);
+
+                    const mensagem = err?.response?.data?.message;
+                    Alert.alert(
+                        "Falha no upload da foto do perfil",
+                        mensagem || "Erro inesperado."
+                    );
+                });
+        }
+
+        onBack();
+    };
+
     return (
         <View
             style={[
                 styles.container,
-                { backgroundColor: "#efe9dc", paddingHorizontal: "5%", alignItems: "stretch" },
+                {
+                    backgroundColor: "#efe9dc",
+                    paddingHorizontal: "5%",
+                    alignItems: "stretch",
+                    paddingVertical: "5%",
+                },
             ]}
-        ></View>
+        >
+            <Text
+                style={{
+                    fontSize: 32,
+                    fontWeight: "bold",
+                }}
+            >
+                Cadastro candidato
+            </Text>
+
+            <ScrollView
+                style={styles.scrollview}
+                contentContainerStyle={styles.scrollviewContainer}
+            >
+                <View style={{ marginTop: 20, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Nome Completo</Text>
+                    <TextInput
+                        placeholder="Nome Completo"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={nomeCompleto}
+                        onChangeText={setNomeCompleto}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Data de nascimento</Text>
+                    <TextInput
+                        placeholder="Data de nascimento"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={nascimento}
+                        onChangeText={setNascimento}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>CPF da Empresa</Text>
+                    <TextInput
+                        placeholder="Insira o CPF"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={cpf}
+                        onChangeText={setCpf}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Gênero</Text>
+                    <TextInput
+                        placeholder="Gênero"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={genero}
+                        onChangeText={setGenero}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Seu endereço</Text>
+                    <TextInput
+                        placeholder="Seu endereço"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={endereco}
+                        onChangeText={setEndereco}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Seu melhor e-mail</Text>
+                    <TextInput
+                        placeholder="Seu melhor e-mail"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Celular</Text>
+                    <TextInput
+                        placeholder="Celular"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={celular}
+                        onChangeText={setCelular}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Formação Acadêmica</Text>
+                    <TextInput
+                        placeholder="Formação Acadêmica"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={formacao}
+                        onChangeText={setFormacao}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>
+                        Experiência Profissional
+                    </Text>
+                    <TextInput
+                        placeholder="Experiência Profissional"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={experiencia}
+                        onChangeText={setExperiencia}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>
+                        Habilidades e Competências
+                    </Text>
+                    <TextInput
+                        placeholder="Habilidades e Competências"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={habilidades}
+                        onChangeText={setHabilidades}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Área de Interesse</Text>
+                    <TextInput
+                        placeholder="Área de Interesse"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={areaInteresse}
+                        onChangeText={setAreaInteresse}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Digite sua senha</Text>
+                    <TextInput
+                        placeholder="Digite sua senha"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        secureTextEntry={true}
+                        value={senha}
+                        onChangeText={setSenha}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Confirme sua Senha</Text>
+                    <TextInput
+                        placeholder="Digite novamente a senha"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        secureTextEntry={true}
+                        value={confirmarSenha}
+                        onChangeText={setConfirmarSenha}
+                    />
+                </View>
+
+                <View
+                    style={{ flexDirection: "row", gap: 20, alignItems: "center", marginTop: 20 }}
+                >
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: "#fff",
+                            borderWidth: 3,
+                            borderColor: Constants.PRIMARY_COLOR3,
+                            borderRadius: 20,
+                            paddingVertical: 12,
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                        onPress={onBack}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 22,
+                                color: Constants.PRIMARY_COLOR3,
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Cancelar
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: Constants.PRIMARY_COLOR2,
+                            borderWidth: 3,
+                            borderColor: Constants.PRIMARY_COLOR3,
+                            borderRadius: 20,
+                            paddingVertical: 12,
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                        onPress={onSubmit}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 22,
+                                color: "#fff",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Continuar
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
+        </View>
     );
 }
 
@@ -365,31 +719,47 @@ function CadastroEmpresa({ onBack }: { onBack(): void }) {
     const [localizacao, setLocalizacao] = useState("");
     const [descricao, setDescricao] = useState("");
     const [porte, setPorte] = useState("");
+    const [foto, setFoto] = useState("");
     const [senha, setSenha] = useState("");
     const [confirmarSenha, setConfirmarSenha] = useState("");
 
     const onSubmit = async () => {
+        if (senha !== confirmarSenha) {
+            Alert.alert("Campos inválidos", "Os campos de senha não estão iguais!");
+            return;
+        }
+
         await axios
             .post("/company", {
-                email: email,
-                password: pass,
+                razaoSocial,
+                nomeFantasia,
+                cnpj,
+                email,
+                setor,
+                localizacao,
+                descricao,
+                porte,
+                senha,
             })
-            .then((res) => res.data)
+            .then(() => onBack())
             .catch((err) => {
                 console.error(err?.response?.data || err);
 
                 const mensagem = err?.response?.data?.message;
                 Alert.alert("Falha no login", mensagem || "Erro inesperado.");
             });
-
-        onBack();
     };
 
     return (
         <View
             style={[
                 styles.container,
-                { backgroundColor: "#efe9dc", paddingHorizontal: "5%", alignItems: "stretch" },
+                {
+                    backgroundColor: "#efe9dc",
+                    paddingHorizontal: "5%",
+                    alignItems: "stretch",
+                    paddingVertical: "5%",
+                },
             ]}
         >
             <Text
@@ -398,134 +768,229 @@ function CadastroEmpresa({ onBack }: { onBack(): void }) {
                     fontWeight: "bold",
                 }}
             >
-                Acesse
+                Cadastro empresa
             </Text>
-            <Text style={{ fontSize: 22 }}>com e-mail e senha para entrar</Text>
 
-            <View
-                style={{
-                    marginTop: 20,
-                    gap: 4,
-                }}
+            <ScrollView
+                style={styles.scrollview}
+                contentContainerStyle={styles.scrollviewContainer}
             >
-                <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>E-mail</Text>
-                <TextInput
-                    placeholder="Digite seu e-mail"
-                    style={{
-                        backgroundColor: "#d9d9d9",
-                        paddingHorizontal: 8,
-                        paddingVertical: 14,
-                        fontSize: 18,
-                        borderRadius: 10,
-                    }}
-                    value={email}
-                    onChangeText={setEmail}
-                />
-            </View>
-
-            <View
-                style={{
-                    marginTop: 10,
-                    gap: 4,
-                }}
-            >
-                <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Senha</Text>
-                <TextInput
-                    placeholder="Digite sua senha"
-                    style={{
-                        backgroundColor: "#d9d9d9",
-                        paddingHorizontal: 8,
-                        paddingVertical: 14,
-                        fontSize: 18,
-                        borderRadius: 10,
-                    }}
-                    secureTextEntry={true}
-                    value={pass}
-                    onChangeText={setPass}
-                />
-            </View>
-
-            <View style={{ flexDirection: "row", gap: 20, alignItems: "center", marginTop: 20 }}>
-                <TouchableOpacity
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 4,
-                        flex: 1,
-                    }}
-                    onPress={() => setKeepLogin((k) => !k)}
-                >
-                    <Icon
-                        name={keepLogin ? "checkbox-outline" : "square-outline"}
-                        color={"#000"}
-                        size={22}
+                <View style={{ marginTop: 20, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Razão Social</Text>
+                    <TextInput
+                        placeholder="Razão Social"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={razaoSocial}
+                        onChangeText={setRazaoSocial}
                     />
-                    <Text style={{ fontSize: 14 }}>Lembrar Senha</Text>
-                </TouchableOpacity>
+                </View>
 
-                <TouchableOpacity
-                    style={{
-                        flexDirection: "row",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: 4,
-                        flex: 1,
-                    }}
-                    onPress={() => {}}
-                >
-                    <Text style={{ fontSize: 14 }}>Esqueci minha senha</Text>
-                </TouchableOpacity>
-            </View>
-
-            <View style={{ flexDirection: "row", gap: 20, alignItems: "center", marginTop: 20 }}>
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: "#fff",
-                        borderWidth: 3,
-                        borderColor: Constants.PRIMARY_COLOR3,
-                        borderRadius: 20,
-                        paddingVertical: 12,
-                        flex: 1,
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                >
-                    <Text
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Nome Fantasia</Text>
+                    <TextInput
+                        placeholder="Nome Fantasia"
                         style={{
-                            fontSize: 22,
-                            color: Constants.PRIMARY_COLOR3,
-                            fontWeight: "bold",
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
                         }}
-                    >
-                        Cadastrar
-                    </Text>
-                </TouchableOpacity>
+                        value={nomeFantasia}
+                        onChangeText={setNomeFantasia}
+                    />
+                </View>
 
-                <TouchableOpacity
-                    style={{
-                        backgroundColor: Constants.PRIMARY_COLOR2,
-                        borderWidth: 3,
-                        borderColor: Constants.PRIMARY_COLOR3,
-                        borderRadius: 20,
-                        paddingVertical: 12,
-                        flex: 1,
-                        alignItems: "center",
-                        justifyContent: "center",
-                    }}
-                    onPress={onSubmit}
-                >
-                    <Text
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>CNPJ da Empresa</Text>
+                    <TextInput
+                        placeholder="Insira o CNPJ"
                         style={{
-                            fontSize: 22,
-                            color: "#fff",
-                            fontWeight: "bold",
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
                         }}
-                    >
-                        Acesse
+                        value={cnpj}
+                        onChangeText={setCnpj}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>
+                        Digite o e-mail empresarial
                     </Text>
-                </TouchableOpacity>
-            </View>
+                    <TextInput
+                        placeholder="Digite seu e-mail empresarial"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={email}
+                        onChangeText={setEmail}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Setor de Atuação</Text>
+                    <TextInput
+                        placeholder="Setor de Atuação"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={setor}
+                        onChangeText={setSetor}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Localização</Text>
+                    <TextInput
+                        placeholder="Localização"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={localizacao}
+                        onChangeText={setLocalizacao}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Descrição da Empresa</Text>
+                    <TextInput
+                        placeholder="Descrição da Empresa"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={descricao}
+                        onChangeText={setDescricao}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Porte da Empresa</Text>
+                    <TextInput
+                        placeholder="Insira o Porte da Empresa"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        value={porte}
+                        onChangeText={setPorte}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Digite sua senha</Text>
+                    <TextInput
+                        placeholder="Digite sua senha"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        secureTextEntry={true}
+                        value={senha}
+                        onChangeText={setSenha}
+                    />
+                </View>
+
+                <View style={{ marginTop: 10, gap: 4 }}>
+                    <Text style={{ fontSize: 18, paddingHorizontal: 6 }}>Confirme sua Senha</Text>
+                    <TextInput
+                        placeholder="Digite novamente a senha"
+                        style={{
+                            backgroundColor: "#d9d9d9",
+                            paddingHorizontal: 8,
+                            paddingVertical: 14,
+                            fontSize: 18,
+                            borderRadius: 10,
+                        }}
+                        secureTextEntry={true}
+                        value={confirmarSenha}
+                        onChangeText={setConfirmarSenha}
+                    />
+                </View>
+
+                <View
+                    style={{ flexDirection: "row", gap: 20, alignItems: "center", marginTop: 20 }}
+                >
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: "#fff",
+                            borderWidth: 3,
+                            borderColor: Constants.PRIMARY_COLOR3,
+                            borderRadius: 20,
+                            paddingVertical: 12,
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                        onPress={onBack}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 22,
+                                color: Constants.PRIMARY_COLOR3,
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Cancelar
+                        </Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={{
+                            backgroundColor: Constants.PRIMARY_COLOR2,
+                            borderWidth: 3,
+                            borderColor: Constants.PRIMARY_COLOR3,
+                            borderRadius: 20,
+                            paddingVertical: 12,
+                            flex: 1,
+                            alignItems: "center",
+                            justifyContent: "center",
+                        }}
+                        onPress={onSubmit}
+                    >
+                        <Text
+                            style={{
+                                fontSize: 22,
+                                color: "#fff",
+                                fontWeight: "bold",
+                            }}
+                        >
+                            Continuar
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </View>
     );
 }
@@ -556,9 +1021,9 @@ function Initial() {
             }}
         />
     ) : index === 4 ? (
-        <CadastroCandidato />
+        <CadastroCandidato onBack={() => setIndex(3)} />
     ) : index === 5 ? (
-        <CadastroEmpresa />
+        <CadastroEmpresa onBack={() => setIndex(3)} />
     ) : (
         <></>
     );
