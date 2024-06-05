@@ -155,13 +155,14 @@ function Login({ onLogin, clickCadastro }: { onLogin(): void; clickCadastro(tipo
     const [keepLogin, setKeepLogin] = useState<boolean>(false);
 
     useEffect(() => {
-        // Promise.all([
-        //     AsyncStorage.getItem("keepLoginStorage"),
-        //     AsyncStorage.getItem("userStorage"),
-        // ]).then((data) => {
-        //     if (data[0] !== "true" || !data[1]) return;
-        //     onLogin();
-        // });
+        Promise.all([
+            AsyncStorage.getItem("keepLoginStorage"),
+            AsyncStorage.getItem("userStorage"),
+        ]).then((data) => {
+            if (data[0] !== "true" || !data[1]) return;
+            Alert.alert("Login automático", "Logado com a conta salva no dispositivo.");
+            onLogin();
+        });
     }, []);
 
     const onSubmit = async () => {
