@@ -6,8 +6,11 @@ import axios from "axios";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import getRandomImage from "../utils/getRandomImage";
 import { Image } from "react-native";
+import { useNavigate } from "react-router-native";
 
 function Matches() {
+    const navegar = useNavigate();
+
     const [user, setUser] = useState<any>();
     const [matches, setMatches] = useState<any>();
     const [selected, setSelected] = useState<(typeof matches)[number]>();
@@ -200,7 +203,7 @@ function Matches() {
                                 flexDirection: "row",
                                 gap: 10,
                             }}
-                            onPress={() => setSelected(undefined)}
+                            onPress={() => navegar("/chat")}
                         >
                             <Icon name={"chatbox-ellipses"} color="#000" size={32} />
                             <Text style={{ fontSize: 24, color: "#fff" }}>Chat</Text>

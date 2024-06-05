@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, Text, ImageBackground, TouchableOpacity } from "react-native";
+import { ScrollView, View, Text, ImageBackground, TouchableOpacity, Alert } from "react-native";
 import { Icon, ProfileItem } from "../components";
 import styles, { WHITE } from "../../assets/styles";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import getRandomImage from "../utils/getRandomImage";
+import { useNavigate } from "react-router-native";
 
 const Profile = () => {
+    const navegar = useNavigate();
+
     const [user, setUser] = useState<any>();
 
     useEffect(() => {
@@ -25,23 +28,7 @@ const Profile = () => {
         <ImageBackground source={require("../../assets/images/bg.png")} style={styles.bg}>
             <ScrollView style={styles.containerProfile}>
                 <ImageBackground source={user.foto} style={styles.photo}>
-                    <View style={styles.top}>
-                        <TouchableOpacity
-                            style={{
-                                backgroundColor: "#fffa",
-                                borderWidth: 1,
-                                borderColor: "#000",
-                                aspectRatio: 1,
-                                borderRadius: 1000,
-                                alignItems: "center",
-                                justifyContent: "center",
-                                marginLeft: 20,
-                                padding: 6,
-                            }}
-                        >
-                            <Icon name="chevron-back" size={24} color={"#000"} />
-                        </TouchableOpacity>
-
+                    <View style={[styles.top, { justifyContent: "flex-end" }]}>
                         <TouchableOpacity
                             style={{
                                 backgroundColor: "#fffa",
@@ -54,8 +41,21 @@ const Profile = () => {
                                 marginRight: 20,
                                 padding: 6,
                             }}
+                            onPress={async () => {
+                                const confirmation = await new Promise((res) => {
+                                    Alert.alert("Confirmação", "Deseja sair da sua conta?", [
+                                        { text: "Não", onPress: () => res(false) },
+                                        { text: "Sim", onPress: () => res(true) },
+                                    ]);
+                                });
+
+                                if (!confirmation) return;
+
+                                await AsyncStorage.removeItem("userStorage");
+                                navegar("/");
+                            }}
                         >
-                            <Icon name="ellipsis-vertical" size={24} color={"#000"} />
+                            <Icon name="exit" size={24} color={"#000"} />
                         </TouchableOpacity>
                     </View>
                 </ImageBackground>
@@ -70,13 +70,12 @@ const Profile = () => {
                 />
 
                 <View style={styles.actionsProfile}>
-                    <TouchableOpacity style={styles.circledButton}>
-                        <Icon name="ellipsis-horizontal" size={20} color={WHITE} />
-                    </TouchableOpacity>
-
-                    <TouchableOpacity style={styles.roundedButton}>
-                        <Icon name="chatbubble" size={20} color={WHITE} />
-                        <Text style={styles.textButton}>Start chatting</Text>
+                    <TouchableOpacity
+                        style={styles.roundedButton}
+                        onPress={() => navegar("/profile/edit")}
+                    >
+                        <Icon name="settings" size={20} color={WHITE} />
+                        <Text style={styles.textButton}>Editar perfil</Text>
                     </TouchableOpacity>
                 </View>
             </ScrollView>

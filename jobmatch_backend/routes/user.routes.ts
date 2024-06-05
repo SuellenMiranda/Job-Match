@@ -74,6 +74,45 @@ userRoutes.post("/", async (req, res) => {
     }
 });
 
+userRoutes.put("/", async (req, res) => {
+    try {
+        const {
+            id,
+            nomeCompleto,
+            nascimento,
+            cpf,
+            genero,
+            endereco,
+            email,
+            celular,
+            formacao,
+            experiencia,
+            habilidades,
+            areaInteresse,
+            senha,
+        }: User = req.body;
+
+        const createdUser = await prisma.user.update({
+            where: { id: id },
+            data: {
+                ...(endereco ? { endereco } : {}),
+                ...(email ? { email } : {}),
+                ...(celular ? { celular } : {}),
+                ...(formacao ? { formacao } : {}),
+                ...(experiencia ? { experiencia } : {}),
+                ...(habilidades ? { habilidades } : {}),
+                ...(areaInteresse ? { areaInteresse } : {}),
+                ...(senha ? { senha: bcrypt.hashSync(senha) } : {}),
+            },
+        });
+
+        return res.send(createdUser);
+    } catch (err) {
+        console.error(err);
+        return res.status(500).send(err);
+    }
+});
+
 userRoutes.post("/fotoPerfil", upload.single("foto"), async (req, res) => {
     try {
         const files = req.files;

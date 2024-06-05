@@ -7,6 +7,11 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+enum ChatMessagesRemetentes {
+    candidato
+    empresa
+}
+
 model User {
     id            Int     @id @default(autoincrement())
     nomeCompleto  String
@@ -41,9 +46,19 @@ model Company {
 }
 
 model Match {
-    id        Int     @id @default(autoincrement())
+    id        Int        @id @default(autoincrement())
     userId    Int
     companyId Int
-    user      User    @relation(fields: [userId], references: [id])
-    company   Company @relation(fields: [companyId], references: [id])
+    user      User       @relation(fields: [userId], references: [id])
+    company   Company    @relation(fields: [companyId], references: [id])
+    Messages  Messages[]
+}
+
+model Messages {
+    id        Int                    @id @default(autoincrement())
+    message   String                 @db.Text
+    horario   DateTime               @default(now())
+    remetente ChatMessagesRemetentes
+    matchId   Int
+    match     Match                  @relation(fields: [matchId], references: [id])
 }

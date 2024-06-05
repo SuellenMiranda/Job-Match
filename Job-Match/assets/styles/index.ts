@@ -224,7 +224,7 @@ export default StyleSheet.create({
         position: "relative",
     },
     top: {
-        paddingTop: 50,
+        paddingTop: 40,
         marginHorizontal: 10,
         flexDirection: "row",
         justifyContent: "space-between",
@@ -248,7 +248,6 @@ export default StyleSheet.create({
     containerMessages: {
         justifyContent: "space-between",
         flex: 1,
-        paddingHorizontal: 10,
     },
 
     // CONTAINER - PROFILE
@@ -266,7 +265,7 @@ export default StyleSheet.create({
         alignItems: "center",
     },
     textButton: {
-        fontSize: 15,
+        fontSize: 18,
         color: WHITE,
         paddingLeft: 5,
     },
